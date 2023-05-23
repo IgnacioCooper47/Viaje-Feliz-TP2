@@ -41,4 +41,13 @@ class PasajeroVIP extends Persona{
 
         return $cadena;
     }
+
+    public function darPorcentajeIncremento(){
+        $incremento = 35;
+        $cantMillas = $this->getCantMillas();
+        if ($cantMillas > 300){
+            $incremento = 30;
+        }
+        return $incremento;
+    }
 }

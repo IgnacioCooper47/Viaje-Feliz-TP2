@@ -14,13 +14,20 @@ class Viaje{
 
     private $objResponsable;
 
-    public function __construct($codigoDeViaje, $destino, $cantMaxPasajeros, $colPasajeros, $objResponsable){
+    private $costoViaje;
+
+    private $costosAbonadosPasajeros;
+
+    
+    public function __construct($codigoDeViaje, $destino, $cantMaxPasajeros, $colPasajeros, $objResponsable, $costoViaje, $costosAbonadosPasajeros){
         //metodo constructor de la clase viaje
         $this->codigoDeViaje = $codigoDeViaje;
         $this->destino = $destino;
         $this->cantMaxPasajeros = $cantMaxPasajeros;
         $this->colPasajeros = $colPasajeros;
         $this->objResponsable = $objResponsable;
+        $this->costoViaje = $costoViaje;
+        $this->costosAbonadosPasajeros = $costosAbonadosPasajeros;
     }
 
     public function getCodigoDeViaje(){
@@ -61,6 +68,22 @@ class Viaje{
 
     public function setObjResponsable($objResponsable){
         $this->objResponsable = $objResponsable;
+    }
+
+    public function getCostoViaje(){
+    return $this->costoViaje;
+    }
+
+    public function setCostoViaje($costoViaje){
+        $this->costoViaje = $costoViaje;
+    }
+
+    public function getCostosAbonadosPasajeros(){
+        return $this->costosAbonadosPasajeros;
+    }
+
+    public function setCostosAbonadosPasajeros($costosAbonadosPasajeros){
+        $this->costosAbonadosPasajeros = $costosAbonadosPasajeros;
     }
 
 
@@ -118,6 +141,36 @@ class Viaje{
             array_push($colPasajeros, $nuevaPersona);
             $this->setColPasajeros($colPasajeros);
             $resultado = "Se agrego el pasajero correctamente!\n";
+        }
+        return $resultado;
+    }
+
+    public function venderPasaje($objPasajero){
+        $colPasajeros = $this->getColPasajeros();
+        $costoViaje = $this->getCostoViaje();
+        $costos = $this->getCostosAbonadosPasajeros();
+        $porcentaje = $objPasajero->darPorcentajeIncremento();
+        
+        if ($this->hayPasajesDisponible()){
+            array_push($colPasajeros, $objPasajero);
+            $this->setColPasajeros($colPasajeros);
+            $costoFinal = ($costoViaje * $porcentaje) / 100;
+            $costoFinal = $costoFinal + $costoViaje;
+            $costos = $costos + $costoFinal;
+            $this->setCostosAbonadosPasajeros($costos);
+        }else {
+            $costoFinal = 0;
+        }
+
+        return $costoFinal;
+    }
+
+    public function hayPasajesDisponible(){
+        $colPasajeros = $this->getColPasajeros();
+        $cantMaxPasajeros = $this->getCantMaxPasajeros();
+        $resultado = false;
+        if (count($colPasajeros) < $cantMaxPasajeros){
+            $resultado = true;
         }
         return $resultado;
     }

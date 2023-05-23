@@ -41,5 +41,7 @@ class Pasajero extends Persona{
         return $cadena;
     }
 
-    
+    public function darPorcentajeIncremento(){
+        return 10;
+    }
 }

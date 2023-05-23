@@ -55,6 +55,26 @@ class PasajeroDiferente extends Persona{
         return $cadena;
     }
 
+    public function darPorcentajeIncremento(){
+        $sillaRuedas = $this->getSillaRuedas();
+        $asistenciaBarque = $this->getAsistenciaBarque();
+        $comidaEspecial = $this->getComidaEspecial();
+        $suma = 0;
+        if ($sillaRuedas == 1){
+            $suma = $suma + 1;
+        } elseif ($asistenciaBarque == 1) {
+            $suma = $suma + 1;
+        } elseif ($comidaEspecial == 1){
+            $suma = $suma + 1;
+        }
 
+        if ($suma == 1){
+            $incremento = 15;
+        } elseif ($suma > 1){
+            $incremento = 30;
+        }
+        
+        return $incremento;
+    }
 
 }
