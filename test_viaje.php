@@ -3,6 +3,9 @@
 include_once "viaje.php";
 include_once "Persona.php";
 include_once "ResponsableV.php";
+include_once "Pasajero.php";
+include_once "PasajeroVIP.php";
+include_once "PasajeroDiferente.php";
 
 echo "\n\n Bienvenido a Viaje Feliz!\n\n";
 
@@ -29,7 +32,7 @@ while ($opcion != 4){
     
     switch ($opcion){
         case 1:
-            echo "\ningrese el codigo de viaje: ";
+            echo "\nIngrese el codigo de viaje: ";
             $codigo = trim(fgets(STDIN));
             
             echo "\n Ingrese el Destino del viaje: ";
@@ -38,11 +41,14 @@ while ($opcion != 4){
             echo "\n Ingrese la cantidad maxima de pasajeros: ";
             $maxPasajeros = trim(fgets(STDIN));
 
+            echo "\nIngrese el costo del viaje: ";
+            $costoViaje = trim(fgets(STDIN));
+
             echo "\n Ahora agregamos los pasajeros al viaje. \n";
             echo "Cuantos pasajeros: ";
             $p = trim(fgets(STDIN));
             
-            $viaje = new viaje($codigo, $destino, $maxPasajeros, $colPasajeros, $responsable);
+            $viaje = new viaje($codigo, $destino, $maxPasajeros, $colPasajeros, $responsable, $costoViaje, 0);
 
             while ($maxPasajeros < $p || !(is_numeric($p))){
                 echo "\n Porfavor volver a ingresar cuantos pasajeros van a viajar, ingreso mas de la cantidad maxima: ";
@@ -51,16 +57,83 @@ while ($opcion != 4){
 
             for ($i=0; $i < $p; $i++){
                 echo "\n Pasajero numero: ". $i + 1;
-                echo "\n Ingrese el nombre del pasajero: ";
-                $nombre = trim(fgets(STDIN));
-                echo "\n Ingrese el apellido del pasajero: ";
-                $apellido = trim(fgets(STDIN));
-                echo "\n Ingrese el numero de telefono: ";
-                $telefono = trim(fgets(STDIN));
-                echo "\n Ingrese el numero de documento del pasajero: ";
-                $documento = trim(fgets(STDIN));
+                
+                echo "\nQue tipo de pasajero es?";
+                echo "
+                \n 1-Pasajero regular.
+                \n 2-Pasajero Vip.
+                \n 3-Pasajero Diferente.";
+                echo "\nIngrese el tipo de pasajero: ";
+                $tipo = trim(fgets(STDIN));
+                while (($tipo > 3 || $tipo < 1) || !(is_numeric($tipo))){
+                    echo "\n Porfavor volver a ingresar el tipo del pasajero, esa opcion no es valida: ";
+                    $tipo = trim(fgets(STDIN));
+                }
 
-                $viaje-> agregarPasajero($nombre, $apellido, $telefono, $documento);
+                if ($tipo == 1){
+                    echo "\n -PASAJERO REGULAR-";
+                    echo "\n Ingrese el nombre del pasajero: ";
+                    $nombre = trim(fgets(STDIN));
+                    echo "\n Ingrese el apellido del pasajero: ";
+                    $apellido = trim(fgets(STDIN));
+                    echo "\n Ingrese el numero de telefono: ";
+                    $telefono = trim(fgets(STDIN));
+                    echo "\n Ingrese el numero de documento del pasajero: ";
+                    $documento = trim(fgets(STDIN));
+                    echo "\n Tendra el numero de asiento: " . $i + 1;
+                    $numeroAsiento = $i + 1;
+                    echo "\n El numero de ticket es: " . $i + 1435679271231;
+                    $numeroTicket = $i + 1435679271231;
+
+                    $viaje->agregarPasajero($nombre, $apellido, $telefono, $documento, $numeroAsiento, $numeroTicket);
+                }elseif ($tipo == 2){
+                    echo "\n -PASAJERO VIP-";
+                    echo "\n Ingrese el nombre del pasajero: ";
+                    $nombre = trim(fgets(STDIN));
+                    echo "\n Ingrese el apellido del pasajero: ";
+                    $apellido = trim(fgets(STDIN));
+                    echo "\n Ingrese el numero de telefono: ";
+                    $telefono = trim(fgets(STDIN));
+                    echo "\n Ingrese el numero de documento del pasajero: ";
+                    $documento = trim(fgets(STDIN));
+                    echo "\n Ingrese el numero de viajero frecuente: ";
+                    $numFrecuente = trim(fgets(STDIN));
+                    echo "\n Ingrese la cantidad de millas acumuladas: ";
+                    $millas = trim(fgets(STDIN));
+
+                    $viaje->agregarPasajeroVip($nombre, $apellido, $telefono, $documento, $numFrecuente, $millas);
+                }elseif ($tipo == 3){
+                    echo "\n -PASAJERO DIFERENTE-";
+                    echo "\n Ingrese el nombre del pasajero: ";
+                    $nombre = trim(fgets(STDIN));
+                    echo "\n Ingrese el apellido del pasajero: ";
+                    $apellido = trim(fgets(STDIN));
+                    echo "\n Ingrese el numero de telefono: ";
+                    $telefono = trim(fgets(STDIN));
+                    echo "\n Ingrese el numero de documento del pasajero: ";
+                    $documento = trim(fgets(STDIN));
+                    echo "\n Ahora ingrese con 0 que refiere a NO, o 1 que refiere a SI,";
+                    echo "\n si el pasajero necesita las siguientes cosas: ";
+                    echo "\n  El pasajero necesita silla de ruedas: ";
+                    $sillaDeRuedas = trim(fgets(STDIN));
+                    while (!(is_numeric($sillaDeRuedas)) || ($sillaDeRuedas > 1 || $sillaDeRuedas < 0)){
+                        echo "\n La opcion no es valida, solo ingresar 1 o 0: ";
+                        $sillaDeRuedas = trim(fgets(STDIN));
+                    }
+                    echo "\n  El pasajero necesita asistencia para el embarque o desembarque: ";
+                    $asistenciaBarque = trim(fgets(STDIN));
+                    while (!(is_numeric($asistenciaBarque)) || ($asistenciaBarque > 1 || $asistenciaBarque < 0)){
+                        echo "\n La opcion no es valida, solo ingresar 1 o 0: ";
+                        $asistenciaBarque = trim(fgets(STDIN));
+                    }
+                    echo "\n  El pasajero necesita comida especial: ";
+                    $comidaEspecial = trim(fgets(STDIN));
+                    while (!(is_numeric($comidaEspecial)) || ($comidaEspecial > 1 || $comidaEspecial < 0)){
+                        echo "\n La opcion no es valida, solo ingresar 1 o 0: ";
+                        $comidaEspecial = trim(fgets(STDIN));
+                    }
+                    $viaje->agregarPasajeroDiferente($nombre, $apellido, $telefono, $documento, $sillaDeRuedas, $asistenciaBarque, $comidaEspecial);
+                }
             }
         break;
 
