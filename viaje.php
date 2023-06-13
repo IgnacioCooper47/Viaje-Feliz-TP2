@@ -86,13 +86,23 @@ class Viaje{
         $this->costosAbonadosPasajeros = $costosAbonadosPasajeros;
     }
 
-
+    //Queria agregar como comentario que despues me di cuenta que tal vez, otra opcion de hacer esto era crear el objeto 
+    // de cada tipo de pasajero en el test y mandar el obj a una sola funcion, pero la verdad me parece mas limpio 
+    // tener todo aca en el codigo del viaje, cuanto mas pueda hacer por si sola la clase mejor, no?
+    // Estoy hablando del tema de tener una funcion de agregar y modificar para cada tipo de pasajero.
 
     public function agregarPasajero($nombre, $apellido, $telefono, $numDocumento, $nroAsiento, $nroTicket){
         $colPasajeros = $this->getColPasajeros();
         $nuevoPasajero = new Pasajero($nombre, $apellido, $telefono, $numDocumento, $nroAsiento, $nroTicket);
         array_push($colPasajeros, $nuevoPasajero);
         $this->setColPasajeros($colPasajeros);
+        $costoViaje = $this->getCostoViaje();
+        $costos = $this->getCostosAbonadosPasajeros();
+        $porcentaje = $nuevoPasajero->darPorcentajeIncremento();
+        $costoFinal = ($costoViaje * $porcentaje) / 100;
+        $costoFinal = $costoFinal + $costoViaje;
+        $costos = $costos + $costoFinal;
+        $this->setCostosAbonadosPasajeros($costoFinal);
     }
 
     public function agregarPasajeroVip($nombre, $apellido, $telefono, $numDocumento, $nroViajeroFrecuente, $cantMillas){
@@ -100,13 +110,31 @@ class Viaje{
         $nuevoPasajeroVip = new PasajeroVIP($nombre, $apellido, $telefono, $numDocumento, $nroViajeroFrecuente, $cantMillas);
         array_push($colPasajeros, $nuevoPasajeroVip);
         $this->setColPasajeros($colPasajeros);
+        $costoViaje = $this->getCostoViaje();
+        $costos = $this->getCostosAbonadosPasajeros();
+        $porcentaje = $nuevoPasajeroVip->darPorcentajeIncremento();
+        $costoFinal = ($costoViaje * $porcentaje) / 100;
+        $costoFinal = $costoFinal + $costoViaje;
+        $costos = $costos + $costoFinal;
+        $this->setCostosAbonadosPasajeros($costoFinal);
     }
 
+    /**
+     * La funcion del pasajero diferente solo acepta desde el test que se le ingrese un 0 o 1, para las variables espceciales 
+     * de silla de ruedas, asistencia y comida especial, para determinar si ls necesita o no.
+     */
     public function agregarPasajeroDiferente($nombre, $apellido, $telefono, $numDocumento, $sillaRuedas, $asistenciaBarque, $comidaEspecial){
         $colPasajeros = $this->getColPasajeros();
         $nuevoPasajeroDiferente = new PasajeroDiferente($nombre, $apellido, $telefono, $numDocumento, $sillaRuedas, $asistenciaBarque, $comidaEspecial);
         array_push($colPasajeros, $nuevoPasajeroDiferente);
         $this->setColPasajeros($colPasajeros);
+        $costoViaje = $this->getCostoViaje();
+        $costos = $this->getCostosAbonadosPasajeros();
+        $porcentaje = $nuevoPasajeroDiferente->darPorcentajeIncremento();
+        $costoFinal = ($costoViaje * $porcentaje) / 100;
+        $costoFinal = $costoFinal + $costoViaje;
+        $costos = $costos + $costoFinal;
+        $this->setCostosAbonadosPasajeros($costoFinal);
     }
 
     public function modificarPasajero($indice, $nombre, $apellido, $telefono, $numDocumento){
@@ -159,6 +187,8 @@ class Viaje{
         $this->setColPasajeros($arreglo);
     }
 
+    //todas las funciones de nuevo pasajero quedaron obsoletas por la funcion de vender pasaje, las dejo igual.
+    //No me di cuenta y las hice igual jajaja.
     public function nuevoPasajero($nombre, $apellido, $telefono, $numDocumento){
         $colPasajeros = $this->getColPasajeros();
         $max = $this->getCantMaxPasajeros();
@@ -219,7 +249,6 @@ class Viaje{
         }else {
             $costoFinal = 0;
         }
-
         return $costoFinal;
     }
 
